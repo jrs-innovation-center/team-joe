@@ -3,7 +3,7 @@ const { Link } = require('react-router')
 const React = require('react')
 const xhr = require('xhr')
 const spotifyAPI = 'https://api.spotify.com'
-
+const newmanUrl = 'https://66.media.tumblr.com/714c3a60e40ab76002c3787ae62dc9cc/tumblr_nq08ay5NXF1te3bqko1_500.gif'
 
 const Spotify = React.createClass({
   getInitialState: function () {
@@ -33,10 +33,10 @@ const Spotify = React.createClass({
   render: function () {
     console.log(this.state)
     var artists = []
-    var images = []
+
     if(this.state.results && this.state.results.artists && this.state.results.artists.items) {
       artists = this.state.results.artists.items
-    // artists.images
+
   }
     return (
      h('div.pa4', [
@@ -52,7 +52,10 @@ const Spotify = React.createClass({
       h('div.artistsContainer',
         artists.map(obj=>
         h('div.artist', [
-          h('h2', obj.name)
+          h('h2', obj.name),
+          h('img',  {
+            src: obj.images.length === 0 ? newmanUrl : obj.images[0]['url']
+          })
         ]))
       ),
       // h('pre', JSON.stringify(this.state.results, null, 4)),
