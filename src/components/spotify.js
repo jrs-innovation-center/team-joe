@@ -57,8 +57,8 @@ const Spotify = React.createClass({
     }
 
     return (
-     h('div.pa4', [
-      h('h1', ['Spotify']),
+     h('div.pa4.tc.bg-blue', [
+      h('h1', ['Spotify Artist Search']),
       h('form', {
         onSubmit: this.handleSubmit
       }, [
@@ -67,20 +67,21 @@ const Spotify = React.createClass({
         }),
         h('button', 'Search')
       ]),
+      h('img', {src: 'http://vectorlogo4u.com/wp-content/uploads/2016/03/spotify-vector-logo.png '}),
       h('div.artistsContainer',
-        artists.map(obj=>
-        h('div.artist', [
-          h('h2', obj.name),
-          h('button', {
-            onClick: this.getAlbums,
-            value: obj.id
-          }, 'Display Albums'),
-          h('a', { href: obj.external_urls.spotify, target: '_blank' }, [
-            h('img',  {
-              src: obj.images.length === 0 ? newmanUrl : obj.images[0]['url']
-            })
-          ]),
-        ]))
+        artists.map(obj=> this.renderArtist(obj))
+        // h('div.artist', [
+        //   h('h2', obj.name),
+        //   h('button', {
+        //     onClick: this.getAlbums,
+        //     value: obj.id
+        //   }, 'Display Albums'),
+        //   h('a', { href: obj.external_urls.spotify, target: '_blank' }, [
+        //     h('img',  {
+        //       src: obj.images.length === 0 ? newmanUrl : obj.images[0]['url']
+        //     })
+        //   ]),
+        // ]))
       ),
       h('div.albumsContainer',
         albums.map(obj=>
@@ -99,7 +100,63 @@ const Spotify = React.createClass({
         className: 'link'
       }, 'Home')
     ])
-  )}
+  )},
+  renderArtist (artist) {
+     // console.log(video)
+     // var videoImage = (video.thumbnails.high.url) ? video.thumbnails.high.url : '/img/magic-word-2.gif'
+
+     // h('div.artist', [
+     //   h('h2', obj.name),
+     //   h('button', {
+     //     onClick: this.getAlbums,
+     //     value: obj.id
+     //   }, 'Display Albums'),
+     //   h('a', { href: obj.external_urls.spotify, target: '_blank' }, [
+     //     h('img',  {
+     //       src: obj.images.length === 0 ? newmanUrl : obj.images[0]['url']
+     //     })
+     //   ]),
+     // ]))
+     var artistImage = artist.images.length === 0 ? newmanUrl : artist.images[0]['url']
+     return (
+       h('div.artist-container.fl.db.w-100.w-50-m.w-25-l.overflow-hidden', {
+         style: {
+           position: 'relative',
+           cursor: 'pointer'
+         }
+       }, [
+         h('a.db.w-100.h-100.aspect-ratio--4x6.grow', {
+           href: artist.external_urls.spotify,
+           target: '_blank',
+           style: {
+             background: `url(${artistImage}) no-repeat center center`,
+             backgroundSize: 'cover'
+           }
+         }, ''),
+         h('h2.f4.pb1.ma1.tc', {
+           style: {
+             position: 'absolute',
+             bottom: '0',
+             left: '0'
+           }
+         }, [
+           h('a.link', {
+             href: artist.external_urls.spotify,
+             style: {
+               color: 'white',
+               textShadow: '2px 2px 6px rgba(0,0,0,.9)'
+             }
+           },
+           artist.name),
+           h('button', {
+               onClick: this.getAlbums,
+               value: artist.id
+             }, 'Display Albums')
+         ]
+         )
+       ])
+     )
+   }
 })
 
 module.exports = Spotify
