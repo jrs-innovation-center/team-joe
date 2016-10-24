@@ -36,7 +36,7 @@ const Spotify = React.createClass({
     xhr({
       method: 'GET',
       json: true,
-      url: `${spotifyAPI}/v1/artists/${e.target.value}/albums`
+      url: `${spotifyAPI}/v1/artists/${e.target.value}/albums?market=US`
     }, (err, res, body) => {
       if (err) return console.log(err.message)
       this.setState({
@@ -47,9 +47,13 @@ const Spotify = React.createClass({
   render: function () {
     console.log(this.state)
     var artists = []
+    var albums = []
 
     if (this.state.results && this.state.results.artists && this.state.results.artists.items) {
       artists = this.state.results.artists.items
+    }
+    if (this.state.results && this.state.results.items) {
+      albums = this.state.results.items
     }
 
     return (
@@ -71,6 +75,17 @@ const Spotify = React.createClass({
             onClick: this.getAlbums,
             value: obj.id
           }, 'Display Albums'),
+          h('a', { href: obj.external_urls.spotify, target: '_blank' }, [
+            h('img',  {
+              src: obj.images.length === 0 ? newmanUrl : obj.images[0]['url']
+            })
+          ]),
+        ]))
+      ),
+      h('div.albumsContainer',
+        albums.map(obj=>
+        h('div.albums', [
+          h('h2', obj.name),
           h('a', { href: obj.external_urls.spotify, target: '_blank' }, [
             h('img',  {
               src: obj.images.length === 0 ? newmanUrl : obj.images[0]['url']
