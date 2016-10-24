@@ -30,14 +30,28 @@ const Spotify = React.createClass({
       })
     }
   )},
+  getAlbums: function (e) {
+    // console.log(e.target.value)
+    // do stuff
+    xhr({
+      method: 'GET',
+      json: true,
+      url: `${spotifyAPI}/v1/artists/${e.target.value}/albums`
+    }, (err, res, body) => {
+      if (err) return console.log(err.message)
+      this.setState({
+        results: body
+      })
+    })
+  },
   render: function () {
     console.log(this.state)
     var artists = []
 
-    if(this.state.results && this.state.results.artists && this.state.results.artists.items) {
+    if (this.state.results && this.state.results.artists && this.state.results.artists.items) {
       artists = this.state.results.artists.items
+    }
 
-  }
     return (
      h('div.pa4', [
       h('h1', ['Spotify']),
@@ -53,9 +67,15 @@ const Spotify = React.createClass({
         artists.map(obj=>
         h('div.artist', [
           h('h2', obj.name),
-          h('img',  {
-            src: obj.images.length === 0 ? newmanUrl : obj.images[0]['url']
-          })
+          h('button', {
+            onClick: this.getAlbums,
+            value: obj.id
+          }, 'Display Albums'),
+          h('a', { href: obj.external_urls.spotify, target: '_blank' }, [
+            h('img',  {
+              src: obj.images.length === 0 ? newmanUrl : obj.images[0]['url']
+            })
+          ]),
         ]))
       ),
       // h('pre', JSON.stringify(this.state.results, null, 4)),
