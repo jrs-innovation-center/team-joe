@@ -26,12 +26,18 @@ const Spotify = React.createClass({
     }, (err, res, body) => {
       if (err) return console.log(err.message)
       this.setState({
-        results: body.artists
+        results: body
       })
     }
   )},
   render: function () {
     console.log(this.state)
+    var artists = []
+    var images = []
+    if(this.state.results && this.state.results.artists && this.state.results.artists.items) {
+      artists = this.state.results.artists.items
+    // artists.images
+  }
     return (
      h('div.pa4', [
       h('h1', ['Spotify']),
@@ -43,7 +49,13 @@ const Spotify = React.createClass({
         }),
         h('button', 'Search')
       ]),
-      h('pre', JSON.stringify(this.state.results, null, 4)),
+      h('div.artistsContainer',
+        artists.map(obj=>
+        h('div.artist', [
+          h('h2', obj.name)
+        ]))
+      ),
+      // h('pre', JSON.stringify(this.state.results, null, 4)),
       h(Link, {
         to: '/',
         className: 'link'
